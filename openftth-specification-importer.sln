@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{45E0D92C-1AE3-41CA-AE16-F086B46D7587}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenFTTH.SpecificationImporter", "src\OpenFTTH.SpecificationImporter\OpenFTTH.SpecificationImporter.csproj", "{39CAC944-0B6A-4677-987A-077C21708055}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{39CAC944-0B6A-4677-987A-077C21708055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39CAC944-0B6A-4677-987A-077C21708055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39CAC944-0B6A-4677-987A-077C21708055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39CAC944-0B6A-4677-987A-077C21708055}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{39CAC944-0B6A-4677-987A-077C21708055} = {45E0D92C-1AE3-41CA-AE16-F086B46D7587}
+	EndGlobalSection
+EndGlobal
