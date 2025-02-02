@@ -17,17 +17,13 @@ internal static class Program
 
     public static async Task Main(string[] args)
     {
-        const string specificationFilesRootPath = "";
-
-        var logger = GetLogger();
-
-        await ProcessAsync(logger, specificationFilesRootPath).ConfigureAwait(false);
+        await ProcessAsync(GetLogger(), AppSetting.Load<Settings>()).ConfigureAwait(false);
     }
 
-    private static async Task ProcessAsync(Logger logger, string specificationFilesRootPath)
+    private static async Task ProcessAsync(Logger logger, Settings settings)
     {
         var filePaths = Directory.EnumerateFiles(
-            specificationFilesRootPath,
+            settings.SpecificationFilesRootPath,
             "*.*",
             SearchOption.AllDirectories);
 
@@ -38,16 +34,12 @@ internal static class Program
             "Generated the following output {JsonSpecification}",
             JsonSerializer.Serialize(specifications));
 
-        var clientId = "";
-        var clientSecret = "";
-        var tokenEndpoint = $"";
-
         using var httpClient = new HttpClient();
-        httpClient.BaseAddress = new Uri("");
+        httpClient.BaseAddress = new Uri(settings.GraphQlAddress);
 
         using var authGraphQLClient = new AuthGraphQlClient(
             httpClient,
-            new(clientId, clientSecret, tokenEndpoint));
+            new(settings.ClientId, settings.ClientSecret, settings.TokenEndPoint));
 
         var request = new GraphQLRequest
         {
