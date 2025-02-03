@@ -19,7 +19,7 @@ internal static class Program
     {
         var filePaths = Directory.EnumerateFiles(
             settings.SpecificationFilesRootPath,
-            "*.*",
+            "*.json*",
             SearchOption.AllDirectories);
 
         var specifications = Specification.BuildSpecification(
