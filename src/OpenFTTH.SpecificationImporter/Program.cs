@@ -20,7 +20,9 @@ internal static class Program
         var filePaths = Directory.EnumerateFiles(
             settings.SpecificationFilesRootPath,
             "*.json*",
-            SearchOption.AllDirectories);
+            SearchOption.AllDirectories).ToList();
+
+        filePaths.ForEach((x) => logger.Information("Found file: {FileName}", x));
 
         var specifications = Specification.BuildSpecification(
             filePaths.Select(path => File.ReadAllText(path)));
@@ -53,6 +55,8 @@ internal static class Program
                 json = JsonSerializer.Serialize(specifications)
             }
         };
+
+        logger.Information("Sending request to GraphQL endpoint.");
 
         var response = await authGraphQLClient
             .MutationAsync<object>(request)
