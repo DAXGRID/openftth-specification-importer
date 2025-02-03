@@ -55,10 +55,10 @@ internal static class Program
         };
 
         var response = await authGraphQLClient
-            .MutationAsync<dynamic>(request)
+            .MutationAsync<object>(request)
             .ConfigureAwait(false);
 
-        logger.Information(JsonSerializer.Serialize(response));
+        logger.Information(JsonSerializer.Serialize(response.Data));
     }
 
     private static Logger GetLogger()
