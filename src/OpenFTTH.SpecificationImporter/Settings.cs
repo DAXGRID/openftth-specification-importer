@@ -18,4 +18,7 @@ internal sealed record Settings
 
     [JsonPropertyName("graphQlAddress")]
     public required string GraphQlAddress { get; init; }
+
+    [JsonPropertyName("topDirectoriesOnly")]
+    public bool TopDirectoriesOnly { get; init; } = true;
 }
