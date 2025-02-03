@@ -10,11 +10,6 @@ namespace OpenFTTH.SpecificationImporter;
 
 internal static class Program
 {
-    private static JsonSerializerOptions _jsonSerializer = new JsonSerializerOptions
-    {
-        PropertyNamingPolicy = null,
-    };
-
     public static async Task Main(string[] args)
     {
         await ProcessAsync(GetLogger(), AppSetting.Load<Settings>()).ConfigureAwait(false);
@@ -55,7 +50,7 @@ internal static class Program
             }",
             Variables = new
             {
-                json = JsonSerializer.Serialize(specifications, _jsonSerializer)
+                json = JsonSerializer.Serialize(specifications)
             }
         };
 
