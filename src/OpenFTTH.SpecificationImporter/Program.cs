@@ -20,7 +20,11 @@ internal static class Program
         var filePaths = Directory.EnumerateFiles(
             settings.SpecificationFilesRootPath,
             "*.json",
-            SearchOption.AllDirectories).ToList();
+            SearchOption.AllDirectories)
+            .Select(x => new FileInfo(x))
+            .Where(x => !x.Attributes.HasFlag(FileAttributes.Hidden))
+            .Select(x => x.FullName)
+            .ToList();
 
         filePaths.ForEach((x) => logger.Information("Found file: {FileName}", x));
 
