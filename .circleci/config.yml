@@ -15,6 +15,16 @@ executors:
         auth:
           username: $DOCKER_LOGIN
           password: $DOCKER_ACCESSTOKEN
+  alpine-git:
+    environment:
+      IMAGE_NAME: openftth/specification-importer
+      CHART_PATH: ./dax/openftth-specification-importer
+      GIT_USER_NAME: "dax-bot"
+      GIT_USER_EMAIL: "admin@dax.dk"
+      GIT_CLONE_REPO: "git@github.com:DAXGRID/dax-charts.git"
+      SSH_FINGERPRINT: "SHA256:in3NbVcXkXWh/rdfhxxXMbChw27bm+13Bqro+J96/6I"
+    docker:
+    - image: alpine/git
 
 jobs:
   build-app:
@@ -103,6 +113,15 @@ workflows:
           requires:
            - build-app
            - build-docker-image
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - update-helm-chart:
+          context: docker
+          requires:
+           - docker-publish-image
           filters:
             tags:
               only: /^v.*/
