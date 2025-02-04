@@ -5,6 +5,7 @@ using Serilog.Core;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace OpenFTTH.SpecificationImporter;
 
@@ -63,10 +64,28 @@ internal static class Program
         logger.Information("Sending request to GraphQL endpoint.");
 
         var response = await authGraphQLClient
-            .MutationAsync<object>(request)
+            .MutationAsync<ImportFromJsonStringResponse>(request)
             .ConfigureAwait(false);
 
-        logger.Information(JsonSerializer.Serialize(response.Data));
+        if (response.Errors?.Length > 0)
+        {
+            foreach (var error in response.Errors)
+            {
+                logger.Information(error.Message);
+            }
+
+            throw new GraphQlFailedException("Received error response back from GraphQL, something is wrong with the mutation.");
+        }
+
+        var importJsonStringResponse = response.Data.Specifications.ImportFromJsonString;
+        if (!importJsonStringResponse.IsSuccess)
+        {
+            throw new GraphQlFailedException($"Failed with errorcode: '{importJsonStringResponse.ErrorCode}' and error message: '{importJsonStringResponse.ErrorMessage}'.");
+        }
+
+        logger.Information(
+            "{GraphQlResponseJson}",
+            JsonSerializer.Serialize(importJsonStringResponse));
     }
 
     private static Logger GetLogger()
@@ -79,4 +98,35 @@ internal static class Program
             .WriteTo.Console(new CompactJsonFormatter())
             .CreateLogger();
     }
+}
+
+internal sealed record ImportFromJsonStringResponse
+{
+    [JsonPropertyName("specifications")]
+    public required SpecificationsWrapper Specifications { get; init; }
+}
+
+internal sealed record SpecificationsWrapper
+{
+    [JsonPropertyName("importFromJsonString")]
+    public required ImportFromJsonStringResult ImportFromJsonString { get; init; }
+}
+
+internal sealed record ImportFromJsonStringResult
+{
+    [JsonPropertyName("isSuccess")]
+    public required bool IsSuccess { get; init; }
+
+    [JsonPropertyName("errorCode")]
+    public required string ErrorCode { get; init; }
+
+    [JsonPropertyName("errorMessage")]
+    public required string ErrorMessage { get; init; }
+}
+
+public class GraphQlFailedException : Exception
+{
+    public GraphQlFailedException() {}
+    public GraphQlFailedException(string? message) : base(message) {}
+    public GraphQlFailedException(string? message, Exception? innerException) : base(message, innerException) {}
 }
