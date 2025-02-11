@@ -24,7 +24,10 @@ FROM mcr.microsoft.com/dotnet/runtime:${DOTNET_VERSION}-jammy-amd64
 # Renew the ARG argument for it to be available in this build context.
 ARG PROJECT_NAME
 
-RUN apt-get update && apt-get install bash curl -y
+RUN apt-get update && apt-get install bash curl pipx -y
+
+RUN pipx install check-jsonschema
+RUN pipx ensurepath
 
 WORKDIR /app
 
