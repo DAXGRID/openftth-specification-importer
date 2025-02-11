@@ -26,8 +26,10 @@ ARG PROJECT_NAME
 
 RUN apt-get update && apt-get install bash curl pipx -y
 
+ENV PIPX_BIN_DIR=/root/.local/bin
+ENV PATH="$PIPX_BIN_DIR:$PATH"
+
 RUN pipx install check-jsonschema
-RUN pipx ensurepath
 
 WORKDIR /app
 
