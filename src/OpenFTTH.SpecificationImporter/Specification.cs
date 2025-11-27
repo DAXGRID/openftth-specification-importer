@@ -15,21 +15,28 @@ internal static class Specification
 
         foreach (var json in specificationJsonTexts)
         {
-            var jsonDocument = JsonSerializer.Deserialize<Dictionary<string, List<Dictionary<string, dynamic>>>>(
-                json,
-                _jsonSerializerOptions);
-
-            ArgumentNullException.ThrowIfNull(jsonDocument);
-
-            foreach (var x in jsonDocument)
+            try
             {
-                if (!specifications.TryGetValue(x.Key, out List<dynamic>? specification))
-                {
-                    specification = new();
-                    specifications.Add(x.Key, specification);
-                }
+                var jsonDocument = JsonSerializer.Deserialize<Dictionary<string, List<Dictionary<string, dynamic>>>>(
+                    json,
+                    _jsonSerializerOptions);
 
-                specification.AddRange(x.Value);
+                ArgumentNullException.ThrowIfNull(jsonDocument);
+
+                foreach (var x in jsonDocument)
+                {
+                    if (!specifications.TryGetValue(x.Key, out List<dynamic>? specification))
+                    {
+                        specification = new();
+                        specifications.Add(x.Key, specification);
+                    }
+
+                    specification.AddRange(x.Value);
+                }
+            }
+            catch (JsonException ex)
+            {
+                throw new ArgumentException($"Could not handle JSON value: '{json}'.", ex);
             }
         }
 
