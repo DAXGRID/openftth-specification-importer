@@ -11,7 +11,7 @@ executors:
     environment:
       IMAGE_NAME: openftth/specification-importer
     docker:
-      - image: cimg/base:2024.12
+      - image: cimg/base:current
         auth:
           username: $DOCKER_LOGIN
           password: $DOCKER_ACCESSTOKEN
