@@ -124,7 +124,7 @@ internal sealed record ImportFromJsonStringResult
     public required string ErrorMessage { get; init; }
 }
 
-public class GraphQlFailedException : Exception
+internal sealed class GraphQlFailedException : Exception
 {
     public GraphQlFailedException() {}
     public GraphQlFailedException(string? message) : base(message) {}
