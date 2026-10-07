@@ -1,7 +1,7 @@
 ARG PROJECT_NAME=OpenFTTH.SpecificationImporter
 ARG DOTNET_VERSION=10.0
 
-FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine AS build-env
 
 # Renew the ARG argument for it to be available in this build context.
 ARG PROJECT_NAME
@@ -19,12 +19,12 @@ WORKDIR /app/src/${PROJECT_NAME}
 RUN dotnet publish -c Release -o out --packages ./packages
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/runtime:${DOTNET_VERSION}
+FROM mcr.microsoft.com/dotnet/runtime:${DOTNET_VERSION}-alpine
 
 # Renew the ARG argument for it to be available in this build context.
 ARG PROJECT_NAME
 
-RUN apt-get update && apt-get install bash curl pipx -y
+RUN apk add --no-cache bash curl pipx
 
 ENV PIPX_BIN_DIR=/root/.local/bin
 ENV PATH="$PIPX_BIN_DIR:$PATH"
