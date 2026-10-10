@@ -37,6 +37,8 @@ WORKDIR /app
 COPY --from=build-env --chown=app:app /app/src/${PROJECT_NAME}/out .
 COPY --chown=app:app specifications-schema.json .
 
+RUN chown app:app /app
+
 USER app
 
 # Cannot use PROJECT_NAME here in environment, have to sadly write out the whole name.
