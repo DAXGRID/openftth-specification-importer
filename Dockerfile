@@ -26,15 +26,18 @@ ARG PROJECT_NAME
 
 RUN apk add --no-cache bash curl pipx
 
-ENV PIPX_BIN_DIR=/root/.local/bin
+ENV PIPX_HOME=/opt/pipx \
+    PIPX_BIN_DIR=/usr/local/bin
 ENV PATH="$PIPX_BIN_DIR:$PATH"
 
 RUN pipx install check-jsonschema
 
 WORKDIR /app
 
-COPY --from=build-env /app/src/${PROJECT_NAME}/out .
-COPY specifications-schema.json .
+COPY --from=build-env --chown=app:app /app/src/${PROJECT_NAME}/out .
+COPY --chown=app:app specifications-schema.json .
+
+USER app
 
 # Cannot use PROJECT_NAME here in environment, have to sadly write out the whole name.
 # There is a hack where you can execute this as an environment variable, but then the process won't have id 1
